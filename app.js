@@ -15,13 +15,16 @@ let player = {
   height: 5,
   speed: 3,
   velX: 0,
-  velY: 0
+  velY: 0,
+  jumping: false
 };
 
 canvas.width = width;
 canvas.height = height;
 
 let keys = [];
+let friction = 0.9;
+let gravity = 0.3;
 
 $('body')[0].addEventListener('keydown', (e) =>{
   keys[e.keyCode] = true;
@@ -34,7 +37,10 @@ $('body')[0].addEventListener('keyup', (e) =>{
 let update = () =>{
 
   if(keys[38]){
-
+    if(!player.jumping){
+      player.jumping = true;
+      player.velY = -player.speed*2;
+    }
   }
   if(keys[39]){
     if(player.velX < player.speed){
@@ -46,6 +52,8 @@ let update = () =>{
       player.velX--;
     }
   }
+  player.velX *= friction;
+  player.velY += gravity;
   player.x += player.velX;
   player.y += player.velY;
 
@@ -53,6 +61,10 @@ let update = () =>{
     player.x = width - player.width;
   }else if(player.x <= 0){
     player.x = 0;
+  }
+  if(player.y >= height - player.height){
+    player.y = height - player.height;
+    player.jumping = false;
   }
   ctx.clearRect(0,0,width,height);
   ctx.fillStyle = 'red';
