@@ -1,71 +1,30 @@
 
+// let keys = [];
 
-let canvas = $('#canvas')[0];
+let players = [new Player(250, 195, 38, 39, 37, 'red'), new Player(270, 195, 87, 68, 65, 'teal')];
 
-let ctx = canvas.getContext('2d');
+let arena = new Arena(500, 200, 0.9, 0.3, players);
 
-let width = 500;
+// $('body')[0].addEventListener('keydown', (e) =>{
+//   keys[e.keyCode] = true;
+// });
 
-let height = 200;
+// $('body')[0].addEventListener('keyup', (e) =>{
+//   keys[e.keyCode] = false;
+// });
 
-let player = new Player(width / 2, height - 5);
+// let update = () =>{
 
-canvas.width = width;
-canvas.height = height;
-
-let keys = [];
-let friction = 0.9;
-let gravity = 0.3;
-
-$('body')[0].addEventListener('keydown', (e) =>{
-  keys[e.keyCode] = true;
-});
-
-$('body')[0].addEventListener('keyup', (e) =>{
-  keys[e.keyCode] = false;
-});
-
-let update = () =>{
-
-  if(keys[38]){
-    if(!player.jumping){
-      player.jumping = true;
-      player.yVelocity = -player.speed*2;
-    }
-  }
-  if(keys[39]){
-    if(player.xVelocity < player.speed){
-      player.xVelocity++;
-    }
-  }
-  if(keys[37]){
-    if(player.xVelocity > -player.speed){
-      player.xVelocity--;
-    }
-  }
-  player.xVelocity *= friction;
-  player.yVelocity += gravity;
-  player.xCoordinate += player.xVelocity;
-  player.yCoordinate += player.yVelocity;
-
-  if(player.xCoordinate >= width - player.width){
-    player.xCoordinate = width - player.width;
-  }else if(player.xCoordinate <= 0){
-    player.xCoordinate = 0;
-  }
-  if(player.yCoordinate >= height - player.height){
-    player.yCoordinate = height - player.height;
-    player.jumping = false;
-  }
-  ctx.clearRect(0,0,width,height);
-  ctx.fillStyle = 'red';
-  ctx.fillRect(player.xCoordinate, player.yCoordinate, player.width, player.height);
-
-  requestAnimationFrame(update);
+//   arena.ctx.clearRect(0, 0, arena.width, arena.height);
+//   player1.action(keys);
+//   player2.action(keys);
+//   player1.draw(arena.ctx);
+//   player2.draw(arena.ctx);
   
-}
+//   requestAnimationFrame(update);
+// }
 
 window.addEventListener('load', () => {
-  update();
-})
+  arena.update();
+});
 
