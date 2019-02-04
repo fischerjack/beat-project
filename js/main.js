@@ -8,16 +8,7 @@ let width = 500;
 
 let height = 200;
 
-let player = {
-  x: width / 2,
-  y: height - 5,
-  width: 5,
-  height: 5,
-  speed: 3,
-  velX: 0,
-  velY: 0,
-  jumping: false
-};
+let player = new Player(width / 2, height - 5);
 
 canvas.width = width;
 canvas.height = height;
@@ -39,36 +30,36 @@ let update = () =>{
   if(keys[38]){
     if(!player.jumping){
       player.jumping = true;
-      player.velY = -player.speed*2;
+      player.yVelocity = -player.speed*2;
     }
   }
   if(keys[39]){
-    if(player.velX < player.speed){
-      player.velX++;
+    if(player.xVelocity < player.speed){
+      player.xVelocity++;
     }
   }
   if(keys[37]){
-    if(player.velX > -player.speed){
-      player.velX--;
+    if(player.xVelocity > -player.speed){
+      player.xVelocity--;
     }
   }
-  player.velX *= friction;
-  player.velY += gravity;
-  player.x += player.velX;
-  player.y += player.velY;
+  player.xVelocity *= friction;
+  player.yVelocity += gravity;
+  player.xCoordinate += player.xVelocity;
+  player.yCoordinate += player.yVelocity;
 
-  if(player.x >= width - player.width){
-    player.x = width - player.width;
-  }else if(player.x <= 0){
-    player.x = 0;
+  if(player.xCoordinate >= width - player.width){
+    player.xCoordinate = width - player.width;
+  }else if(player.xCoordinate <= 0){
+    player.xCoordinate = 0;
   }
-  if(player.y >= height - player.height){
-    player.y = height - player.height;
+  if(player.yCoordinate >= height - player.height){
+    player.yCoordinate = height - player.height;
     player.jumping = false;
   }
   ctx.clearRect(0,0,width,height);
   ctx.fillStyle = 'red';
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.fillRect(player.xCoordinate, player.yCoordinate, player.width, player.height);
 
   requestAnimationFrame(update);
   
