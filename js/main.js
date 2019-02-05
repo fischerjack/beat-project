@@ -1,9 +1,9 @@
 
 // let keys = [];
 
-let players = [new Player(250, 195, 38, 39, 37, 'red'), new Player(270, 195, 87, 68, 65, 'teal')];
+let players = [new Player(250, 195, 38, 39, 37), new Player(270, 195, 87, 68, 65)];
 
-let arena = new Arena(500, 200, 0.9, 0.3, players);
+let arena = new Arena(700, 300, 0.9, 0.3, players);
 
 // $('body')[0].addEventListener('keydown', (e) =>{
 //   keys[e.keyCode] = true;

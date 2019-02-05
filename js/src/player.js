@@ -1,12 +1,12 @@
 class Player{
 
-  constructor(startingXCoordinate, startingYCoordinate, up, left, right, color){
+  constructor(startingXCoordinate, startingYCoordinate, up, left, right,){
     this.xCoordinate = startingXCoordinate;
     this.yCoordinate = startingYCoordinate;
     this.arenaWidth = 0;
     this.arenaHeight = 0;
-    this.width = 5;
-    this.height = 5;
+    this.width = 40;
+    this.height = 50;
     this.speed = 3;
     this.xVelocity = 0;
     this.yVelocity = 0;
@@ -16,7 +16,16 @@ class Player{
     this.up = up;
     this.left = left;
     this.right = right;
-    this.color = color;
+    // this.color = color;
+    this.playerImage = new Image();
+    this.playerImage.src = 'img/goten-sprite.png';
+    this.frameIndex = 0;
+    this.ticksCount = 0;
+    this.ticksPerFrame = 15;
+    this.numberOfFrames = 10;
+    this.health = 50;
+    this.damage = 5;
+
   }
 
   action(keyArr){
@@ -52,9 +61,24 @@ class Player{
     }
   }
 
+  spriteUpdate(){
+    this.ticksCount++;
+    if(this.ticksCount > this.ticksPerFrame){
+      this.ticksCount = 0;
+      if(this.frameIndex <  this.numberOfFrames){
+        this.frameIndex++;
+      } else{
+        this.frameIndex = 0;
+      }
+    }
+  }
+
   draw(ctx){
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.xCoordinate, this.yCoordinate, this.width, this.height);
+    // ctx.fillStyle = this.color;
+    // ctx.fillRect(this.xCoordinate, this.yCoordinate, this.width, this.height);
+    
+    ctx.drawImage(this.playerImage, this.frameIndex * this.width, 0, 40, 50, this.xCoordinate, this.yCoordinate , 40, 50);
+    this.spriteUpdate();
   }
 
 }
