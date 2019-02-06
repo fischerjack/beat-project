@@ -1,19 +1,17 @@
-class Arena{
+class ArenaController{
 
-  constructor(canvasWidth, canvasHeight, friction, gravity, players){
+  constructor(friction, gravity, players, map){
     this.canvas = $('#canvas')[0];
     this.ctx = this.canvas.getContext('2d');
-    this.canvas.width = canvasWidth;
-    this.canvas.height = canvasHeight;
+    this.canvas.width = map.canvasWidth;
+    this.canvas.height = map.canvasHeight;
     this.players = players;
     this.keys = [];
     this.players.forEach(element => {
-      element.arenaWidth = canvasWidth;
-      element.arenaHeight = canvasHeight;
       element.friction = friction;
       element.gravity = gravity;
     });
-
+    this.map = map;
     $('body')[0].addEventListener('keydown', (e) =>{
       this.keys[e.keyCode] = true;
     });
@@ -21,33 +19,6 @@ class Arena{
       this.keys[e.keyCode] = false;
     });
 
-    //Temporary code below this line
-    this.boxes = [];
-    this.boxes.push({
-      xCoordinate: 0,
-      yCoordinate: 0,
-      width: 10,
-      height: canvasHeight
-    });
-    this.boxes.push({
-      xCoordinate: 0,
-      yCoordinate: canvasHeight - 2,
-      width: canvasWidth,
-      height: 50
-    });
-    this.boxes.push({
-      xCoordinate: canvasWidth - 10,
-      yCoordinate: 0,
-      width: 50,
-      height: canvasHeight
-    });
-    this.boxes.push({
-      xCoordinate: canvasWidth / 3,
-      yCoordinate: canvasHeight - 60,
-      width: canvasWidth / 3,
-      height: 5
-    });
-    //Temporary code above this line
   }
 
 
@@ -91,29 +62,40 @@ class Arena{
 
 
   update(){
+
+    //Clear the canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    
+    //Draw the map
+    this.map.draw(this.ctx);
 
-    //Temporary code below this line
-    this.ctx.fillStyle = "black";
-    this.ctx.beginPath();
-    for (let i = 0; i < this.boxes.length; i++) {
-      this.ctx.rect(this.boxes[i].xCoordinate, this.boxes[i].yCoordinate, this.boxes[i].width, this.boxes[i].height);
-    }
-    this.ctx.fill();
-    //Temporary code above this line
-
+    //Check player collisions with the map elements and prevent collisions if necessary, then take player actions and draw players
     this.players.forEach(element => {
-      // element.grounded = false;
-      for(let i = 0; i < this.boxes.length; i++){
-        element.dir = this.collisionCheck(element, this.boxes[i]);
+      for(let i = 0; i < this.map.mapTerrain.length; i++){
+        element.collisionDirection = this.collisionCheck(element, this.map.mapTerrain[i]);
         element.collisionPrevention();
       }
+      this.players.forEach(e => {
+        if(element !== e){
+          element.collisionDirection = this.collisionCheck(element, e);
+          if(element.collisionDirection == 'l' || element.collisionDirection == 'r'){
+            element.collisionPrevention();
+          } else if(element.collisionDirection == 't'){
+            e.grounded = true;
+            e.jumping = false;
+            element.jumping = true;
+          } else if(element.collisionDirection == 'b'){
+            e.jumping = false;
+            element.grounded = true;
+            element.jumping = false;
+          }
+        }
+      });
       element.action(this.keys);
       element.draw(this.ctx);
     });
     
+    //Get next animation frame
     requestAnimationFrame(() => this.update());
   }
 }

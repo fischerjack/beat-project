@@ -13,8 +13,6 @@ class Player{
   constructor(startingXCoordinate, startingYCoordinate, up, left, right,){
     this.xCoordinate = startingXCoordinate;                   //The x coordinate of the player (top-left corner)
     this.yCoordinate = startingYCoordinate;                   //The y coordinate of the player (top-left corner)
-    this.arenaWidth = 0;                                      
-    this.arenaHeight = 0;
     this.width = 40;
     this.height = 50;
     this.speed = 3;
@@ -23,11 +21,11 @@ class Player{
     this.friction = 0;
     this.gravity = 0;
     this.jumping = false;
-
-    //Temporary code below this line
     this.grounded = false;
-    this.dir = '';
-    //Temporary code above this line
+    this.collisionDirection = '';
+    
+    //playerDirection is either 0 or 50, which will move vertically between the two symmetric levels in the sprite sheet
+    this.playerDirection = 50;
 
     this.up = up;
     this.left = left;
@@ -59,11 +57,13 @@ class Player{
       if(this.xVelocity < this.speed){
         this.xVelocity++;
       }
+      this.playerDirection = 0;
     }
     if(keyArr[this.right]){
       if(this.xVelocity > -this.speed){
         this.xVelocity--;
       }
+      this.playerDirection = 50;
     }
     this.xVelocity *= this.friction;
     this.yVelocity += this.gravity;
@@ -79,13 +79,13 @@ class Player{
 
   collisionPrevention(){
     
-    if (this.dir === "l" || this.dir === "r") {
+    if (this.collisionDirection === "l" || this.collisionDirection === "r") {
       this.xVelocity = 0;
       this.jumping = false;
-    } else if (this.dir === "b") {
+    } else if (this.collisionDirection === "b") {
       this.grounded = true;
       this.jumping = false;
-    } else if (this.dir === "t") {
+    } else if (this.collisionDirection === "t") {
       this.yVelocity *= -1;
     }
   }
@@ -103,7 +103,7 @@ class Player{
   }
 
   draw(ctx){
-    ctx.drawImage(this.playerImage, this.frameIndex * this.width, 0, 40, 50, this.xCoordinate, this.yCoordinate , 40, 50);
+    ctx.drawImage(this.playerImage, this.frameIndex * this.width, this.playerDirection, 40, 50, this.xCoordinate, this.yCoordinate , 40, 50);
     this.spriteUpdate();
   }
 
