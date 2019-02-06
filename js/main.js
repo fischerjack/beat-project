@@ -1,28 +1,7 @@
 
-// let keys = [];
-
-let players = [new Player(250, 195, 38, 39, 37), new Player(270, 195, 87, 68, 65)];
+let players = [new Player(250, 180, 38, 39, 37), new Player(310, 100, 87, 68, 65)];
 
 let arena = new Arena(700, 300, 0.9, 0.3, players);
-
-// $('body')[0].addEventListener('keydown', (e) =>{
-//   keys[e.keyCode] = true;
-// });
-
-// $('body')[0].addEventListener('keyup', (e) =>{
-//   keys[e.keyCode] = false;
-// });
-
-// let update = () =>{
-
-//   arena.ctx.clearRect(0, 0, arena.width, arena.height);
-//   player1.action(keys);
-//   player2.action(keys);
-//   player1.draw(arena.ctx);
-//   player2.draw(arena.ctx);
-  
-//   requestAnimationFrame(update);
-// }
 
 window.addEventListener('load', () => {
   arena.update();
