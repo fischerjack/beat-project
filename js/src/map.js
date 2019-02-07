@@ -27,6 +27,18 @@ class Map{
       width: canvasWidth / 3,
       height: 5
     });
+    this.mapTerrain.push({
+      xCoordinate: canvasWidth / 8,
+      yCoordinate: canvasHeight - 120,
+      width: canvasWidth / 8,
+      height: 5
+    });
+    this.mapTerrain.push({
+      xCoordinate: canvasWidth / 8 * 6,
+      yCoordinate: canvasHeight - 120,
+      width: canvasWidth / 8,
+      height: 5
+    });
   }
 
   draw(ctx){

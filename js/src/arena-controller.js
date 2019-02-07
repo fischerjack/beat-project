@@ -3,6 +3,7 @@ class ArenaController{
   constructor(friction, gravity, players, map){
     this.canvas = $('#canvas')[0];
     this.ctx = this.canvas.getContext('2d');
+    // this.audioCtx = new AudioContext();
     this.canvas.width = map.canvasWidth;
     this.canvas.height = map.canvasHeight;
     this.players = players;
@@ -20,7 +21,7 @@ class ArenaController{
     });
 
   }
-
+  
 
   //Temporary code below this line
   collisionCheck(shapeA, shapeB){
@@ -89,8 +90,10 @@ class ArenaController{
             element.grounded = true;
             element.jumping = false;
           }
+          element.attack(this.keys, e);
         }
       });
+
       element.action(this.keys);
       element.draw(this.ctx);
     });

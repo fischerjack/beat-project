@@ -10,7 +10,7 @@ class Player{
    * @param {number} left                - keycode used for moving left (negative x-direction)
    * @param {number} right               - keycode used for moving right (positive x-direction)
    */
-  constructor(startingXCoordinate, startingYCoordinate, up, left, right,){
+  constructor(startingXCoordinate, startingYCoordinate, up, left, right, kick){
     this.xCoordinate = startingXCoordinate;                   //The x coordinate of the player (top-left corner)
     this.yCoordinate = startingYCoordinate;                   //The y coordinate of the player (top-left corner)
     this.width = 40;
@@ -23,21 +23,24 @@ class Player{
     this.jumping = false;
     this.grounded = false;
     this.collisionDirection = '';
-    
+
     //playerDirection is either 0 or 50, which will move vertically between the two symmetric levels in the sprite sheet
     this.playerDirection = 50;
 
     this.up = up;
     this.left = left;
     this.right = right;
+    this.kick = kick;
     this.playerImage = new Image();
     this.playerImage.src = 'img/goten-sprite.png';
     this.frameIndex = 0;
     this.ticksCount = 0;
     this.ticksPerFrame = 15;
     this.numberOfFrames = 1;
-    this.health = 50;
-    this.damage = 5;
+    
+    this.collisionWithPlayer = false;
+
+    this.collidingPlayer = null;
 
 
   }
@@ -65,6 +68,8 @@ class Player{
       }
       this.playerDirection = 50;
     }
+    
+
     this.xVelocity *= this.friction;
     this.yVelocity += this.gravity;
 
@@ -75,6 +80,19 @@ class Player{
     this.xCoordinate += this.xVelocity;
     this.yCoordinate += this.yVelocity;
     this.grounded = false;
+  }
+
+  attack(keyArr, player){
+    if(keyArr[this.kick]){
+      if(this.xCoordinate === player.xCoordinate + 40){
+        player.xVelocity -= 6;
+        player.yVelocity -= 1;
+      }
+      if(this.xCoordinate === player.xCoordinate - 40){
+        player.xVelocity -= 6;
+        player.yVelocity -= 1;
+      }
+    }
   }
 
   collisionPrevention(){
