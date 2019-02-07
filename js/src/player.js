@@ -10,7 +10,7 @@ class Player{
    * @param {number} left                - keycode used for moving left (negative x-direction)
    * @param {number} right               - keycode used for moving right (positive x-direction)
    */
-  constructor(startingXCoordinate, startingYCoordinate, up, left, right, kick){
+  constructor(startingXCoordinate, startingYCoordinate, up, left, right, kick, spriteSrc){
     this.xCoordinate = startingXCoordinate;                   //The x coordinate of the player (top-left corner)
     this.yCoordinate = startingYCoordinate;                   //The y coordinate of the player (top-left corner)
     this.width = 40;
@@ -32,7 +32,7 @@ class Player{
     this.right = right;
     this.kick = kick;
     this.playerImage = new Image();
-    this.playerImage.src = 'img/goten-sprite.png';
+    this.playerImage.src = spriteSrc;
     this.frameIndex = 0;
     this.ticksCount = 0;
     this.ticksPerFrame = 15;
