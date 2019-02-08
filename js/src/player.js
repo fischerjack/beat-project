@@ -147,6 +147,7 @@ class Player{
   }
 
   spriteUpdate(){
+    this.numberOfFrames = this.currentSpriteArray.length - 1;
     this.ticksCount++;
     if(this.ticksCount > this.ticksPerFrame){
       this.ticksCount = 0;
