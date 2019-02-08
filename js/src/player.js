@@ -33,16 +33,14 @@ class Player{
     this.kick = kick;
     this.playerImage = new Image();
     this.playerImage.src = spriteSrc;
+    this.spriteArrays = [[0,1], [2],[3],[4],[5],[6],[7]]; //[[Idle],[Punch],[Kick],[Block],[Jump],[Run],[Hurt]]
+    this.currentSpriteArray = this.spriteArrays[0];
     this.frameIndex = 0;
     this.ticksCount = 0;
     this.ticksPerFrame = 15;
-    this.numberOfFrames = 1;
+    this.numberOfFrames = this.currentSpriteArray.length - 1;
+    this.lives = 3;
     
-    this.collisionWithPlayer = false;
-
-    this.collidingPlayer = null;
-
-
   }
   /**
    * Represents the possible actions that the player can take (movement, attacking, blocking...)
@@ -53,6 +51,11 @@ class Player{
     if(!this.jumping && this.grounded){
       this.jumping = true;
       this.grounded = false;
+
+      //SET SPRITE ANIMATIONS TO JUMPING - NEED TO CHECK FOR A BETTER WAY TO DO THIS IN THE FUTURE
+      this.currentSpriteArray = this.spriteArrays[4];
+      this.numberOfFrames = this.currentSpriteArray.length - 1;
+      //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       this.yVelocity = -this.speed*2;
     }
     }
@@ -61,12 +64,24 @@ class Player{
         this.xVelocity++;
       }
       this.playerDirection = 0;
+      //SET SPRITE ANIMATIONS TO RUNNING IF NOT JUMPING - NEED TO CHECK FOR A BETTER WAY TO DO THIS IN THE FUTURE
+      if(this.jumping == false){
+        this.currentSpriteArray = this.spriteArrays[5];
+        this.numberOfFrames = this.currentSpriteArray.length - 1;
+      }
+      //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if(keyArr[this.right]){
       if(this.xVelocity > -this.speed){
         this.xVelocity--;
       }
       this.playerDirection = 50;
+      //SET SPRITE ANIMATIONS TO RUNNING IF NOT JUMPING - NEED TO CHECK FOR A BETTER WAY TO DO THIS IN THE FUTURE
+      if(this.jumping == false){
+        this.currentSpriteArray = this.spriteArrays[5];
+        this.numberOfFrames = this.currentSpriteArray.length - 1;
+      }
+      //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     
 
@@ -84,15 +99,38 @@ class Player{
 
   attack(keyArr, player){
     if(keyArr[this.kick]){
+      //SET SPRITE ANIMATIONS TO JUMPING - NEED TO CHECK FOR A BETTER WAY TO DO THIS IN THE FUTURE
+      this.currentSpriteArray = this.spriteArrays[2];
+      this.numberOfFrames = this.currentSpriteArray.length - 1;
+      //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       if(this.xCoordinate === player.xCoordinate + 40){
-        player.xVelocity -= 6;
+        player.xVelocity -= 12;
         player.yVelocity -= 1;
       }
       if(this.xCoordinate === player.xCoordinate - 40){
-        player.xVelocity -= 6;
+        player.xVelocity += 12;
         player.yVelocity -= 1;
       }
     }
+  }
+
+  respawn(map){
+    if(this.yCoordinate > map.canvasHeight && this.lives > 0){
+      this.xCoordinate = map.canvasWidth / 2;
+      this.yCoordinate = map.canvasHeight / 2;
+      this.xVelocity = 0;
+      this.yVelocity = 0;
+      this.lives--;
+      if(this.lives == 0){
+        // alert("Out of lives");
+        // this.lives--;
+        this.xCoordinate = map.canvasWidth;
+        this.yCoordinate = map.canvasHeight;
+
+      }
+    }
+    
+    
   }
 
   collisionPrevention(){
@@ -121,7 +159,8 @@ class Player{
   }
 
   draw(ctx){
-    ctx.drawImage(this.playerImage, this.frameIndex * this.width, this.playerDirection, 40, 50, this.xCoordinate, this.yCoordinate , 40, 50);
+    // ctx.drawImage(this.playerImage, this.frameIndex * this.width, this.playerDirection, 40, 50, this.xCoordinate, this.yCoordinate , 40, 50);
+    ctx.drawImage(this.playerImage, this.currentSpriteArray[this.frameIndex] * this.width, this.playerDirection, 40, 50, this.xCoordinate, this.yCoordinate , 40, 50);
     this.spriteUpdate();
   }
 

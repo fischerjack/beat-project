@@ -70,6 +70,14 @@ class ArenaController{
     //Draw the map
     this.map.draw(this.ctx);
 
+    //Update HTML with player lives (HARDCODED - NEEDS TO BE ABSTRACTED IN THE FUTURE)
+    let count = 0;
+    this.players.forEach(element => {
+      $('div div p span')[count].innerHTML = element.lives;
+      count++;
+    });
+    // $('div')
+
     //Check player collisions with the map elements and prevent collisions if necessary, then take player actions and draw players
     this.players.forEach(element => {
       for(let i = 0; i < this.map.mapTerrain.length; i++){
@@ -93,9 +101,18 @@ class ArenaController{
           element.attack(this.keys, e);
         }
       });
-
+      
       element.action(this.keys);
+      element.respawn(this.map);
       element.draw(this.ctx);
+
+      //RESET SPRITE ANIMATIONS TO IDLE - NEED TO CHECK FOR A BETTER WAY TO DO THIS IN THE FUTURE
+      if(element.jumping == false){
+        element.currentSpriteArray = element.spriteArrays[0];
+        element.numberOfFrames = element.currentSpriteArray.length - 1;
+      }
+      //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     });
     
     //Get next animation frame
