@@ -33,7 +33,7 @@ class Player{
     this.kick = kick;
     this.playerImage = new Image();
     this.playerImage.src = spriteSrc;
-    this.spriteArrays = [[0,1], [2],[3],[4],[5],[6],[7]]; //[[Idle],[Punch],[Kick],[Block],[Jump],[Run],[Hurt]]
+    this.spriteArrays = [[0,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7]]; //[[Idle],[Punch],[Kick],[Block],[Jump],[Run],[Hurt]]
     this.currentSpriteArray = this.spriteArrays[0];
     this.frameIndex = 0;
     this.ticksCount = 0;
