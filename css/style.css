@@ -5,7 +5,7 @@
 
 div{
   display: flex;
-  height: 80vh;
+  /*height: 80vh;*/
   flex-direction: column;
   justify-content: center;
   align-items: center;
